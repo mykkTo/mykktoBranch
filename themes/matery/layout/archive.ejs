@@ -1,0 +1,351 @@
+<style>
+    /*归档页自定义样式*/
+    .archive-container{
+      padding: 20px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    .archive:not(:last-child) {
+      margin-bottom: 3rem;
+    }
+
+    .archive .articles {
+      border-left: 1px solid #dbdbdb;
+    }
+
+    .archive .article {
+      border-top: none;
+      margin-left: -1px;
+      padding: 0.4rem 1.5rem;
+      border-left: 3px solid transparent;
+    }
+
+    .archive .article:hover {
+      transition: all .6s;
+      -webkit-transition: all .6s;
+      -o-transition: all .6s;
+      -moz-transition: all .6s;
+      border-left-color: #0f9d58 ;
+    }
+
+    .archive .article time {
+      font-size: 1rem;
+      color: deeppink;
+      /* color: darkgray; */
+    }
+    article-sort-item_title{
+      display: -webkit-box;
+      overflow: hidden;
+      height: 60px;
+      color: #4c4948;
+      font-size: .75rem;
+      -webkit-transition: all .3s;
+      -moz-transition: all .3s;
+      -o-transition: all .3s;
+      -ms-transition: all .3s;
+      transition: all .3s;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .archive .article h6 {
+      margin: 0;
+    }
+
+    .archive .article h6 a {
+      line-height: 2.5;
+      color: inherit;
+      border-bottom: 1px dashed transparent;
+    }
+
+    .archive .article h6 a:hover {
+      border-bottom-color: #0f9d58;
+      padding-left: 16px;
+      transition: all .5s;
+      -webkit-transition: all .5s;
+      -o-transition: all .5s;
+      -moz-transition: all .5s;
+    }
+
+    .archive .articles .imgcontent{
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      overflow: hidden;
+    }
+
+    .archive .articles .imgcontent .postimg{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .archive .articles .imgcontent .postimg:hover{
+      transform: scale(1.3);
+      transition: all .6s;
+      -webkit-transition: all .6s;
+      -o-transition: all .6s;
+      -moz-transition: all .6s;
+    }
+    .article-sort-post{
+      display: inline-block;
+      position: relative;
+      top: -16px;
+      left: 10px;
+    }
+
+    .hbe-input-container{
+      width: 80%;
+      max-width: 800px;
+      position: relative;
+      margin: 100px auto;
+    }
+
+    .hbe-input-container  .btn-decrypt{
+      display: inline-block;
+      vertical-align: top;
+      width: 120px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 16px;
+      color: #ffffff;
+      background-color: #3f90ff;
+      text-align: center;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+    .about-cover {
+      height: 50vh;
+    }
+    .desc-content{
+      padding: 0 50px;
+    }
+    @media only screen and (max-width: 601px) {
+      .desc-content {
+        padding: 0 15px;
+      }
+    }
+
+    .v .vlist .vcard {
+      padding-top: 2.5em !important;
+    }
+
+ </style>
+
+<%- partial('_partial/bg-cover') %>
+
+<main class="content">
+
+    <% if (theme.postCalendar) { %>
+        <%- partial('_widget/post-calendar') %>
+    <% } %>
+
+    <div class="container archive-container ">
+        <div class="card">
+            <div class="card-content">
+                <div class="tag-chips">
+                    <span onclick="showTable()" id="sp-table" class="chip center-align waves-effect waves-light default"
+                          data-tagname="时间列表"
+                          style="background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%); color:#fff">时间列表
+                    </span>
+                    <span onclick="showTime()" id="sp-timeline"
+                          class="chip center-align waves-effect waves-light default"
+                          data-tagname="时间轴" style="background-color: #F9EBEA;">时间轴
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cd-table" class="container archive-container">
+        <div class="card">
+            <div class="card-content">
+                <% const groups = {};
+                const years = [];
+                page.posts.each(post => {
+                    const year = post.date.year();
+                    if (typeof (groups[year]) === 'undefined') {
+                        groups[year] = [];
+                        years.push(year);
+                    }
+                    groups[year].push(post);
+                });
+                years.sort((a, b) => b - a); %>
+                <% for (let year of years) { %>
+                    <div class="archive">
+                        <h4 class="archive-year" id="<%= year %>"><%= year %>年</h4>
+                        <div class="articles">
+                            <% for (let post of groups[year].sort((a, b) => b.date.diff(a.date))) { %>
+                                <div class="article content>">
+                                <!--  <a href="<%= url_for(post.link ? post.link : post.path) %>">
+                                    <div class="imgcontent"><img class="postimg" src="<%= post.img %>" alt="<%= post.title %>"></div>  
+                                  </a> -->
+                                  <div class="article-sort-post">
+                                    <div class="article-sort-item_title">
+                                      <a href="<%= url_for(post.link ? post.link : post.path) %>">
+                                        <h5>
+                                          <i class="fa fa-clock" style="font-size: 1rem;cursor: pointer;"></i>
+                                          <time class="is-text-small" datetime="<%= date_xml(post.date) %>" itemprop="datePublished" >
+                                            <%= date(post.date, 'YYYY-MM-D') %> 
+                                          </time>
+                                        </h5>
+                                        <h6 class="is-6"><a href="<%= url_for(post.link ? post.link : post.path) %>"><%= post.title %></a></h6>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <%
+    /**
+     * hashCode function.
+     *
+     * @param str str
+     * @returns {number}
+     */
+    var hashCode = function (str) {
+        if (!str && str.length === 0) {
+            return 0;
+        }
+
+        var hash = 0;
+        for (var i = 0, len = str.length; i < len; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return hash;
+    };
+
+    // init year and month variable.
+    var year = '1970';
+    var month = '1970-01';
+
+    // post feature image.
+    var featureimg = '/medias/featureimages/0.jpg';
+    var featureImages = theme.featureImages;
+    %>
+
+    <div id="cd-timeline" class="container" style="display: none">
+        <% page.posts.each(function(post) { %>
+            <div class="cd-timeline-block">
+
+                <%# year. %>
+                <% if (date(post.date, 'YYYY') != year) { %>
+                    <% year = date(post.date, 'YYYY'); %>
+                    <div class="cd-timeline-img year" data-aos="zoom-in-up">
+                        <a href="<%- url_for('/archives/' + year) %>"><%- year %></a>
+                    </div>
+                <% } %>
+
+                <%# month. %>
+                <% if (date(post.date, 'YYYY-MM') != month) { %>
+                    <%
+                        month = date(post.date, 'YYYY-MM');
+                        var m = date(post.date, 'MM')
+                    %>
+                    <div class="cd-timeline-img month" data-aos="zoom-in-up">
+                        <a href="<%- url_for('/archives/' + year + '/' + m) %>"><%- m %></a>
+                    </div>
+                <% } %>
+
+                <%# every day posts. %>
+                <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                    <span><%- date(post.date, 'YYYY-MM-DD').substring(8, 10) %></span>
+                </div>
+                <article class="cd-timeline-content" data-aos="fade-up">
+                    <div class="article col s12 m6">
+                        <div class="card">
+                            <a href="<%- url_for(post.path) %>">
+                                <div class="card-image">
+                                    <% if (post.img) { %>
+                                        <img src="<%= post.img %>" class="responsive-img" alt="<%- post.title %>">
+                                    <% } else { %>
+                                        <%
+                                            var len = featureImages.length;
+                                            var num = Math.abs(hashCode(post.title) % len);
+                                            featureimg = featureImages[num];
+                                        %>
+                                        <img src="<%= featureimg %>" class="responsive-img" alt="<%- post.title %>">
+                                    <% } %>
+                                    <span class="card-title"><%- post.title %></span>
+                                </div>
+                            </a>
+                            <div class="card-content article-content">
+                                <div class="summary block-with-text">
+                                    <% if (post.summary && post.summary.length > 0) { %>
+                                        <%- post.summary %>
+                                    <% } else { %>
+                                        <%- strip_html(post.content).substring(0, 120) %>
+                                    <% } %>
+                                </div>
+                                <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i><%= date(post.date, config.date_format) %>
+                                </span>
+                                    <span class="publish-author">
+                                        <% if (post.categories && post.categories.length > 0) { %>
+                                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                            <% post.categories.forEach(category => { %>
+                                                <a href="<%- url_for(category.path) %>" class="post-category"
+                                                   target="_blank">
+                                    <%- category.name %>
+                                    </a>
+                                            <% }); %>
+                                        <% } else if (post.author && post.author.length > 0) { %>
+                                            <i class="fas fa-user fa-fw"></i>
+                                            <%- post.author %>
+                                        <% } else { %>
+                                            <i class="fas fa-user fa-fw"></i>
+                                            <%- config.author %>
+                                        <% } %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <% if (post.tags && post.tags.length) { %>
+                                <div class="card-action article-tags">
+                                    <% post.tags.forEach(tag => { %>
+                                        <a href="<%- url_for(tag.path) %>"><span
+                                                    class="chip bg-color"><%= tag.name %></span></a>
+                                    <% }); %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        <% }); %>
+    </div>
+
+</main>
+<% if (page.total > 1) { %>
+    <%- partial('_partial/paging') %>
+<% } %>
+
+<script>
+    function showTime() {
+        $("#cd-timeline").show();
+        $("#cd-table").hide();
+        $("#sp-timeline").css('background', 'linear-gradient(to right, #4cbf30 0%, #0f9d58 100%)');
+        $("#sp-timeline").css('color', '#fff');
+        $("#sp-table").css('background', '#F9EBEA')
+        $("#sp-table").css('color', 'rgba(0,0,0,0.6)');
+    }
+
+    function showTable() {
+        $("#cd-timeline").hide();
+        $("#cd-table").show();
+        $("#sp-table").css('background', 'linear-gradient(to right, #4cbf30 0%, #0f9d58 100%)');
+        $("#sp-table").css('color', '#fff');
+        $("#sp-timeline").css('background', '#F9EBEA')
+        $("#sp-timeline").css('color', 'rgba(0,0,0,0.6)');
+    }
+
+</script>

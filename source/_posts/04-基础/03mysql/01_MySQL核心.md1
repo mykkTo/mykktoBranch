@@ -1,0 +1,79 @@
+---
+title: MySQL核心精要
+author: mykk
+top: false
+cover: false
+toc: true
+mathjax: false
+summary: mysql的核心精简，非入门
+tags:
+  - mysql
+  - 调优
+categories:
+  - 数据库
+abbrlink: 
+reprintPolicy: cc_by
+date: 2022-08-19 12:17:33
+coverImg:
+img:
+password:
+---
+
+
+
+
+
+
+
+## 目录：
+
+- 存储引擎
+- 索引
+- explain
+- 事务
+- 锁
+
+
+
+
+
+## 一、概述
+
+### 1、
+
+### 2、
+
+### 3、
+
+### 4、
+
+### 5、
+
+
+
+## 二、
+
+### 1、
+
+### 2、
+
+### 3、
+
+### 4、
+
+### 5、
+
+
+
+## 三、
+
+### 1、
+
+### 2、
+
+### 3、
+
+### 4、
+
+### 5、
+
